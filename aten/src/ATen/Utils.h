@@ -138,6 +138,32 @@ namespace detail {
 CAFFE2_API
 Tensor empty_cpu(IntArrayRef size, c10::optional<ScalarType> dtype_opt, c10::optional<Layout> layout_opt,
                  c10::optional<Device> device_opt, c10::optional<bool> pin_memory_opt, c10::optional<c10::MemoryFormat> memory_format_opt);
+
+template <typename T>
+CAFFE2_API
+Tensor tensor_cpu(ArrayRef<T> values, const TensorOptions& options);
+
+template <typename T>
+CAFFE2_API
+Tensor tensor_backend(ArrayRef<T> values, const TensorOptions& options);
+
+template <typename T>
+CAFFE2_API
+Tensor tensor_complex_cpu(ArrayRef<T> values, const TensorOptions& options);
+
+template <typename T>
+CAFFE2_API
+Tensor tensor_complex_backend(ArrayRef<T> values, const TensorOptions& options);
+
+#define TENSOR(T, _1)                                           \
+  CAFFE2_API Tensor tensor(ArrayRef<T> values, const TensorOptions& options);
+AT_FORALL_SCALAR_TYPES_AND3(Bool, Half, BFloat16, TENSOR)
+#undef TENSOR
+
+#define TENSOR(T, _1)                                               \
+  CAFFE2_API Tensor tensor(ArrayRef<T> values, const TensorOptions& options);
+AT_FORALL_COMPLEX_TYPES(TENSOR)
+#undef TENSOR
 } // namespace detail
 
 } // at
