@@ -730,7 +730,7 @@ class Conv2d final : public BaseOp {
         stride_(stride),
         padding_(padding),
         w_(at::rand(wsizes, at::device(at::kCPU).dtype(at::kFloat))),
-        b_(at::zeros(wsizes[0], at::device(at::kCPU).dtype(at::kFloat))){
+        b_(at::rand(wsizes[0], at::device(at::kCPU).dtype(at::kFloat))){
   }
 
   at::Tensor run(at::Tensor& t) const override {
@@ -849,7 +849,6 @@ class MobileNetV2 final : public OpsList {
     ops_.emplace_back(new Conv2d({384, 64, 1, 1}, 1, 1, 0));
     ops_.emplace_back(new Hardtanh_());
     ops_.emplace_back(new Conv2d({384, 1, 3, 3}, 384, 1, 1));
-    ops_.emplace_back(new Hardtanh_());
     ops_.emplace_back(new Hardtanh_());
     ops_.emplace_back(new Conv2d({64, 384, 1, 1}, 1, 1, 0));
     ops_.emplace_back(new Conv2d({384, 64, 1, 1}, 1, 1, 0));
